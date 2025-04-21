@@ -3,7 +3,7 @@
 set -euo pipefail
 
 
-WORKFLOW_DIR="commit-emailer"
+WORKFLOW_DIR="reusable-workflows/commit-emailer"
 
 if [ "$1" == "load_prompt" ]; then
   # Load the prompt into environment
