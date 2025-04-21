@@ -29,16 +29,16 @@ jobs:
           echo "commit_msg=$commit_msg" >> $GITHUB_ENV
 
       - name: Make scripts executable
-        run: chmod +x .github/workflows/*.sh
+        run: chmod +x commit-emailer/*.sh
 
       - name: Load Prompt
-        run: bash .github/workflows/prepare_files.sh load_prompt
+        run: bash commit-emailer/prepare_files.sh load_prompt
 
       - name: Professionalize commit message
-        run: bash .github/workflows/call_openai.sh "${{ env.prompt }}" "${{ env.commit_msg }}" "${{ secrets.OPENAI_API_KEY }}"
+        run: bash commit-emailer/call_openai.sh "${{ env.prompt }}" "${{ env.commit_msg }}" "${{ secrets.OPENAI_API_KEY }}"
 
       - name: Prepare final HTML email
-        run: bash .github/workflows/prepare_files.sh prepare_email "${{ env.professional_msg }}"
+        run: bash commit-emailer/prepare_files.sh prepare_email "${{ env.professional_msg }}"
 
       - name: Confirm email_ready.html
         run: |

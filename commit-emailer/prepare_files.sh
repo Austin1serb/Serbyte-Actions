@@ -3,7 +3,7 @@
 set -euo pipefail
 
 
-WORKFLOW_DIR=".github/workflows"
+WORKFLOW_DIR="commit-emailer"
 
 if [ "$1" == "load_prompt" ]; then
   # Load the prompt into environment
