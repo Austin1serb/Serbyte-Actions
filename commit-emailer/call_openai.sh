@@ -9,7 +9,7 @@ API_KEY="$3"
 # Log what is being sent to OpenAI
 echo "📝 Sending the following request to OpenAI:"
 echo "----------------------------------------"
-echo "Model: gpt-3.5-turbo"
+echo "Model: gpt-4.1-nano"
 echo "System Message:"
 echo "$PROMPT"
 echo "User Message:"
