@@ -20,25 +20,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout client repository
         uses: actions/checkout@v4
+        with:
+          path: client-repo
+
+      - name: Checkout reusable workflows repository
+        uses: actions/checkout@v4
+        with:
+          repository: Austin1serb/Serbyte-Actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: reusable-workflows
 
       - name: Get latest commit message
         run: |
+          cd client-repo
           commit_msg=$(git log -1 --pretty=format:'%s')
           echo "commit_msg=$commit_msg" >> $GITHUB_ENV
 
       - name: Make scripts executable
-        run: chmod +x commit-emailer/*.sh
+        run: chmod +x reusable-workflows/commit-emailer/*.sh
 
       - name: Load Prompt
-        run: bash commit-emailer/prepare_files.sh load_prompt
+        run: bash reusable-workflows/commit-emailer/prepare_files.sh load_prompt
 
       - name: Professionalize commit message
-        run: bash commit-emailer/call_openai.sh "${{ env.prompt }}" "${{ env.commit_msg }}" "${{ secrets.OPENAI_API_KEY }}"
+        run: bash reusable-workflows/commit-emailer/call_openai.sh "${{ env.prompt }}" "${{ env.commit_msg }}" "${{ secrets.OPENAI_API_KEY }}"
 
       - name: Prepare final HTML email
-        run: bash commit-emailer/prepare_files.sh prepare_email "${{ env.professional_msg }}"
+        run: bash reusable-workflows/commit-emailer/prepare_files.sh prepare_email "${{ env.professional_msg }}"
 
       - name: Confirm email_ready.html
         run: |
