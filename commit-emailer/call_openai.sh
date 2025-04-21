@@ -9,7 +9,7 @@ API_KEY="$3"
 # Log what is being sent to OpenAI
 echo "📝 Sending the following request to OpenAI:"
 echo "----------------------------------------"
-echo "Model: gpt-4.1-nano"
+echo "Model: gpt-3.5-turbo-0125"
 echo "System Message:"
 echo "$PROMPT"
 echo "User Message:"
@@ -24,7 +24,7 @@ response=$(curl -s -X POST "https://api.openai.com/v1/chat/completions" \
       --arg prompt "$PROMPT" \
       --arg commit_msg "$COMMIT_MSG" \
       '{
-        "model": "gpt-4.1-nano",
+        "model": "gpt-3.5-turbo-0125",
         "messages": [
           {"role": "system", "content": $prompt},
           {"role": "user", "content": $commit_msg}
