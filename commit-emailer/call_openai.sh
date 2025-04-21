@@ -24,12 +24,15 @@ response=$(curl -s -X POST "https://api.openai.com/v1/chat/completions" \
       --arg prompt "$PROMPT" \
       --arg commit_msg "$COMMIT_MSG" \
       '{
-        "model": "gpt-3.5-turbo",
+        "model": "gpt-4.1-nano",
         "messages": [
           {"role": "system", "content": $prompt},
           {"role": "user", "content": $commit_msg}
         ]
       }')")
+
+echo "🔍 OpenAI response:"
+echo "$response"
 
 professional_msg=$(echo "$response" | jq -r '.choices[0].message.content')
 
