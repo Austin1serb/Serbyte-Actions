@@ -32,6 +32,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: reusable-workflows
 
+      - name: Cache reuseable-workflows
+        uses: actions/cache@v4
+        with:
+          path: reusable-workflows/.git
+          key: reusable-workflows-${{ runner.os }}-${{ hashFiles('reusable-workflows/.git/HEAD') }}
+          restore-keys: |
+            reusable-workflows-${{ runner.os }}-
+
       - name: Get latest commit message
         run: |
           cd client-repo
