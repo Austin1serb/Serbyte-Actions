@@ -1,0 +1,21 @@
+# .github/workflows/release.yml
+name: Build & Release
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run build # tsc + ncc build -> dist/index.js
+      - run: git diff --exit-code # fail if dist/ unstaged
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
