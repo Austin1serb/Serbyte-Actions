@@ -1,50 +1,46 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
+# reusable-workflows/commit-emailer/call_openai.sh
 set -euo pipefail
 
-PROMPT="$1"
-COMMIT_MSG="$2"
-API_KEY="$3"
+PROMPT_FILE="${PROMPT_FILE:?PROMPT_FILE env var not set}"
+COMMIT_MSG="$1"    # first arg
+API_KEY="$2"       # second arg
 
-# Log what is being sent to OpenAI
-echo "📝 Sending the following request to OpenAI:"
-echo "----------------------------------------"
-echo "Model: gpt-3.5-turbo-0125"
-echo "System Message:"
-echo "$PROMPT"
-echo "User Message:"
-echo "$COMMIT_MSG"
-echo "----------------------------------------"
-
-
-response=$(curl -s -X POST "https://api.openai.com/v1/chat/completions" \
-  -H "Authorization: Bearer $API_KEY" \
+# Actually send the request
+response=$(
+curl https://api.openai.com/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -d "$(jq -n \
-      --arg prompt "$PROMPT" \
-      --arg commit_msg "$COMMIT_MSG" \
-      '{
-        "model": "gpt-3.5-turbo-0125",
-        "messages": [
-          {"role": "system", "content": $prompt},
-          {"role": "user", "content": $commit_msg}
-        ]
-      }')")
+  -H "Authorization: Bearer $API_KEY" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [
+      { 
+        "role": "developer", 
+        "content": "$PROMPT_FILE"
+      },
+      { 
+        "role": "user", 
+        "content": "$COMMIT_MSG"
+      }
+    ]
+  }')
 
-echo "🔍 OpenAI response:"
+echo "🔍 OpenAI Response:"
 echo "$response"
 
-professional_msg=$(echo "$response" | jq -r '.choices[0].message.content')
+# Extract message
+professional_msg=$(jq -r '.choices[0].message.content' <<< "$response")
 
-if [ -z "$professional_msg" ] || [ "$professional_msg" = "null" ]; then
-  echo "⚠️ OpenAI API returned an empty response. Falling back to commit message."
+if [[ -z "$professional_msg" || "$professional_msg" == "null" ]]; then
+  echo "⚠️ OpenAI returned an empty message — falling back to commit message."
   professional_msg="$COMMIT_MSG"
 fi
 
+# Export into GitHub Actions
 {
   echo "professional_msg<<EOF"
   echo "$professional_msg"
   echo "EOF"
 } >> "$GITHUB_ENV"
 
-echo "✅ OpenAI call completed!"
+echo "✅ OpenAI call completed successfully!"
