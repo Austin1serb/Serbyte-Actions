@@ -10,5 +10,5 @@ outputs:
   email_body:
     description: "HTML-formatted summary ready for sending"
 runs:
-  using: "node16"
+  using: "node20"
   main: "dist/index.js"

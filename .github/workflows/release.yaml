@@ -18,11 +18,15 @@ jobs:
       - run: npm run build
 
       # Fail if dist/ has uncommitted changes (ensures build was checked in)
-      - name: Check dist for uncommitted changes
+      - name: Check dist is committed (via git ls-files)
         run: |
-          if [ -n "$(git status --porcelain dist)" ]; then
-            echo "❌ 'dist/' has uncommitted changes. Please build and commit them." >&2
-            exit 1
+          if git ls-files -m dist | grep .; then
+          echo "❌ dist/ has modified files not committed"
+          echo "Run 'npm run build' to update then commit"
+          git diff dist
+          exit 1
+          else
+          echo "✅ dist/ is clean"
           fi
 
       # Create version tag based on package.json version
