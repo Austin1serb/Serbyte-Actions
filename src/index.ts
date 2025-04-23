@@ -27,7 +27,7 @@ async function run() {
     core.notice(`systemPrompt: ${systemPrompt}`);
     core.notice(`commitMessages: ${commitMessages}`);
     core.notice(`emailTemplate: ${emailTemplate}`);
-    core.notice(`Test Openai API call: ${openai.models.list()}`);
+    core.notice(`Test Openai API call: ${await openai.models.list()}`);
 
     // Call OpenAI API
     const completion = await openai.chat.completions.create({
