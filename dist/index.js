@@ -35717,7 +35717,17 @@ async function run() {
         core.notice("✅ Email body successfully generated.");
     }
     catch (error) {
-        core.setFailed(`❌ ${error instanceof Error ? error.message : String(error)}`);
+        if (error instanceof Error) {
+            core.error(`❌ Error message: ${error.message}`);
+            if ("response" in error) {
+                const err = error;
+                core.error(`🔁 OpenAI response error: ${JSON.stringify(err.response?.data, null, 2)}`);
+            }
+            core.setFailed("🔥 Action failed — check above for full error trace.");
+        }
+        else {
+            core.setFailed(`🔥 Unknown error: ${String(error)}`);
+        }
     }
 }
 run();
