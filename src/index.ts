@@ -10,7 +10,6 @@ async function run() {
   try {
     const openai = new OpenAI({apiKey: OPENAI_API_KEY});
     if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is not set");
-    const model = core.getInput("openai-model") || "gpt-4o-mini";
 
     const commits = github.context.payload.commits ?? [];
     if (!commits.length) throw new Error("No commits in payload");
@@ -20,7 +19,7 @@ async function run() {
 
     // Call OpenAI API
     const completion = await openai.chat.completions.create({
-      model,
+      model: "gpt-4o-mini",
       messages: [
         {role: "system", content: systemPrompt},
         {role: "user", content: commitMessages}
