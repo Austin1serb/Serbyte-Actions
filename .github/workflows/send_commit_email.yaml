@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Summarize commits with OpenAI
-        uses: Serbyte-Actions/@v1
+        uses: Austin1serb/Serbyte-Actions@v1
         id: summarize
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
