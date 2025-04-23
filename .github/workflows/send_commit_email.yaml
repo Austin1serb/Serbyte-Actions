@@ -1,4 +1,6 @@
+# .github/workflows/send_commit_email.yml
 name: Summarize & Email
+
 on:
   workflow_call:
     secrets:
@@ -17,7 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: Serbyte-Actions/@v1
+      - name: Summarize commits with OpenAI
+        uses: Serbyte-Actions/@v1
         id: summarize
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

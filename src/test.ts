@@ -1,5 +1,4 @@
-import * as fs from "fs/promises";
-import * as path from "path";
+import {emailTemplate, systemPrompt} from "./assets";
 import OpenAI from "openai";
 import "dotenv/config";
 
@@ -9,14 +8,6 @@ async function mockRun() {
 
     // Mock commits
     const commits = [{message: "fixed mobile nav bug"}, {message: "updated FAQ section"}, {message: "added checkout validation"}];
-
-    // Load system prompt
-    const promptPath = path.join(__dirname, "prompt.md");
-    const systemPrompt = await fs.readFile(promptPath, "utf8");
-
-    // Load email template
-    const emailTemplatePath = path.join(__dirname, "email.html");
-    const emailTemplate = await fs.readFile(emailTemplatePath, "utf8");
 
     // Create user content
     const commitMessages = commits.map(c => `- ${c.message.trim()}`).join("\n");
@@ -35,10 +26,8 @@ async function mockRun() {
 
     const repoName = "automedicskirkland";
 
-    // Final email
-
     // Fill {{BODY}} and {{REPO_NAME}} inside full email template
-    const finalEmail = emailTemplate.replace("{{BODY}}", summary).replace("{{REPO_NAME}}", repoName);
+    const finalEmail = emailTemplate.replace("{{BODY}}", summary).replace(/{{REPO_NAME}}/g, repoName);
 
     // Instead of core.setOutput, just log it
     console.log("🔥 FINAL EMAIL:");

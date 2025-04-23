@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
+    "prebuild": "ts-node scripts/embed-assets.ts",
     "build": "tsc && ncc build src/index.ts -o dist",
     "local-test": "ts-node --project tsconfig.json src/test.ts"
   },

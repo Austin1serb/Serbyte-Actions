@@ -1,8 +1,8 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import * as fs from "fs/promises";
-import * as path from "path";
-import OpenAI from "openai";
+
+import {emailTemplate, systemPrompt} from "./assets";
+import {OpenAI} from "openai";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
@@ -14,12 +14,6 @@ async function run() {
 
     const commits = github.context.payload.commits ?? [];
     if (!commits.length) throw new Error("No commits in payload");
-
-    // Load prompt and email template
-    const [systemPrompt, emailTemplate] = await Promise.all([
-      fs.readFile(path.join(__dirname, "prompt.md"), "utf8"),
-      fs.readFile(path.join(__dirname, "email.html"), "utf8")
-    ]);
 
     // Prepare commit messages
     const commitMessages = commits.map((c: any) => `- ${c.message.trim()}`).join("\n");
@@ -39,7 +33,7 @@ async function run() {
     const repoName = github.context.repo.repo;
 
     // Fill {{BODY}} and {{REPO_NAME}} inside full email template
-    const finalEmail = emailTemplate.replace("{{BODY}}", summary).replace("{{REPO_NAME}}", repoName);
+    const finalEmail = emailTemplate.replace("{{BODY}}", summary).replace(/{{REPO_NAME}}/g, repoName);
 
     core.setOutput("email_body", finalEmail);
     core.notice("✅ Email body successfully generated.");
