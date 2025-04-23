@@ -31,9 +31,25 @@ jobs:
           fi
 
       # Create version tag based on package.json version
-      - name: Extract version from package.json
+      - name: Auto-bump patch version
         id: version
-        run: echo "version=v$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+           
+          # Get current version
+            current=$(jq -r .version package.json)
+             echo "Current version: $current"
+
+           # Bump patch (x.y.z+1)
+           new=$(npx semver $current -i patch)
+           echo "New version: $new"
+
+           # Update package.json
+           jq --arg v "$new" '.version = $v' package.json > temp.json && mv temp.json package.json
+           git add package.json
+           git commit -m "chore: bump version to v$new"
+           echo "version=v$new" >> $GITHUB_OUTPUT
 
       - name: Tag commit with version
         run: |
