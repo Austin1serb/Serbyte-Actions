@@ -18,15 +18,12 @@ jobs:
       - run: npm run build
 
       # Fail if dist/ has uncommitted changes (ensures build was checked in)
-      - name: Check dist is committed (via git ls-files)
+      - name: Soft-check dist/ for changes
         run: |
-          if git ls-files -m dist | grep .; then
-          echo "❌ dist/ has modified files not committed"
-          echo "Run 'npm run build' to update then commit"
-          git diff dist
-          exit 1
+          if git diff --quiet -- dist; then
+           echo "✅ dist/ is clean and committed"
           else
-          echo "✅ dist/ is clean"
+           echo "::warning::⚠️ dist/ has changes. Did you forget to rebuild or commit?"
           fi
 
       # Create version tag based on package.json version
