@@ -1,5 +1,4 @@
-```markdown
-# Commit-Email-Action
+ # Commit-Email-Action
 
 > **Turn every commit into a polished status update — automatically.**  
 > Summarises Git commit messages with OpenAI and e-mails your clients the results via any SMTP account, wrapped in a beautiful HTML template.
@@ -20,7 +19,7 @@
 
 ## 🏗 Repository layout
 
-```
+```yaml
 Serbyte Actions/
 ├─ dist/              # compiled bundle (checked-in after build)
 ├─ src/
@@ -169,7 +168,5 @@ git push
 
 [MIT](LICENSE)
 
----
-
 Built with ❤️ by **Serbyte** — Let your code speak for itself.
-```
+ 
