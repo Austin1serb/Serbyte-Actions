@@ -35693,6 +35693,8 @@ async function run() {
         const openai = new openai_1.OpenAI({ apiKey: OPENAI_API_KEY });
         if (!OPENAI_API_KEY)
             throw new Error("OPENAI_API_KEY is not set");
+        const model = core.getInput("openai-model") || "gpt-4o-mini";
+        console.log("model: ", model);
         const commits = github.context.payload.commits ?? [];
         if (!commits.length)
             throw new Error("No commits in payload");
@@ -35700,18 +35702,21 @@ async function run() {
         const commitMessages = commits.map((c) => `- ${c.message.trim()}`).join("\n");
         // Call OpenAI API
         const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
+            model,
             messages: [
                 { role: "system", content: assets_1.systemPrompt },
                 { role: "user", content: commitMessages }
             ]
         });
+        console.log(completion);
+        console.log(completion.choices[0].message.content);
         const summary = completion?.choices?.[0]?.message?.content?.trim();
         if (!summary)
             throw new Error("Empty OpenAI response");
         const repoName = github.context.repo.repo;
         // Fill {{BODY}} and {{REPO_NAME}} inside full email template
         const finalEmail = assets_1.emailTemplate.replace("{{BODY}}", summary).replace(/{{REPO_NAME}}/g, repoName);
+        console.log(finalEmail);
         core.setOutput("email_body", finalEmail);
         core.notice("✅ Email body successfully generated.");
     }

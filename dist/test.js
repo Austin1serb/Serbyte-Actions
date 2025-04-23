@@ -21,6 +21,7 @@ async function mockRun() {
                 { role: "user", content: commitMessages }
             ]
         });
+        console.log(completion);
         const summary = completion?.choices?.[0]?.message?.content?.trim();
         if (!summary)
             throw new Error("Empty OpenAI response");
