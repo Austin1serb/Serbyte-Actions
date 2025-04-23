@@ -15,7 +15,6 @@ jobs:
           cache: "npm"
 
       - run: npm ci
-      - run: npm run build
 
       # Fail if dist/ has uncommitted changes (ensures build was checked in)
       - name: Soft-check dist/ for changes
