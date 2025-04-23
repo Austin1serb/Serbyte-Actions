@@ -35702,7 +35702,7 @@ async function run() {
         const commitMessages = commits.map((c) => `- ${c.message.trim()}`).join("\n");
         // Call OpenAI API
         const completion = await openai.chat.completions.create({
-            model,
+            model: "gpt-4o-mini",
             messages: [
                 { role: "system", content: assets_1.systemPrompt },
                 { role: "user", content: commitMessages }

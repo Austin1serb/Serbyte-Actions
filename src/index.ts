@@ -22,7 +22,7 @@ async function run() {
 
     // Call OpenAI API
     const completion = await openai.chat.completions.create({
-      model,
+      model: "gpt-4o-mini",
       messages: [
         {role: "system", content: systemPrompt},
         {role: "user", content: commitMessages}
