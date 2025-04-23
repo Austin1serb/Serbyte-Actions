@@ -41,4 +41,4 @@ jobs:
           subject: "Website Update: New Changes Implemented - ${{ github.repository }}"
           to: ${{ secrets.CLIENT_EMAIL }}
           from: Serbyte Bot <${{ secrets.SMTP_USERNAME }}>
-          body: ${{ steps.summarize.outputs.email_body }}
+          html_body: ${{ steps.summarize.outputs.email_body }}
