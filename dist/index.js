@@ -35728,6 +35728,7 @@ async function run() {
         else {
             core.setFailed(`🔥 Unknown error: ${String(error)}`);
         }
+        core.setFailed(`🔥 Unknown error: ${String(error)}`);
     }
 }
 run();
