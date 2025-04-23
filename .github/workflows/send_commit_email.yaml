@@ -19,11 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 🔌 Curl OpenAI API
-        run: |
-          curl -i https://api.openai.com/v1/models \
-          -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}"
-
       - name: Summarize commits with OpenAI
         uses: Austin1serb/Serbyte-Actions@v1
         id: summarize

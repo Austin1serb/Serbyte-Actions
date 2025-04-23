@@ -35691,6 +35691,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 async function run() {
     try {
         const openai = new openai_1.OpenAI({ apiKey: OPENAI_API_KEY });
+        core.notice(`OPENAI_API_KEY: ${OPENAI_API_KEY}`);
         if (!OPENAI_API_KEY)
             throw new Error("OPENAI_API_KEY is not set");
         const model = core.getInput("openai-model") || "gpt-4o-mini";
@@ -35702,6 +35703,10 @@ async function run() {
         // Prepare commit messages
         const commitMessages = commits.map((c) => `- ${c.message.trim()}`).join("\n");
         core.notice(`commitMessages: ${commitMessages}`);
+        core.notice(`systemPrompt: ${assets_1.systemPrompt}`);
+        core.notice(`commitMessages: ${commitMessages}`);
+        core.notice(`emailTemplate: ${assets_1.emailTemplate}`);
+        core.notice(`Test Openai API call: ${openai.models.list()}`);
         // Call OpenAI API
         const completion = await openai.chat.completions.create({
             model: "gpt-4o-mini",
