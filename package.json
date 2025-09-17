@@ -1,0 +1,27 @@
+{
+  "name": "serbyte-actions",
+  "version": "1.0.4",
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "ts-node scripts/embed-assets.ts",
+    "build": "tsc && ncc build src/index.ts -o dist",
+    "local-test": "ts-node --project tsconfig.json src/test.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "@vercel/ncc": "^0.38.3",
+    "dotenv": "^16.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.0",
+    "openai": "^4.95.1",
+    "prettier": "^3.5.3"
+  }
+}

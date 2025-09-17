@@ -1,0 +1,44 @@
+# .github/workflows/send_commit_email.yml
+name: Summarize & Email
+
+on:
+  workflow_call:
+    secrets:
+      OPENAI_API_KEY:
+        required: true
+      SMTP_USERNAME:
+        required: true
+      SMTP_PASSWORD:
+        required: true
+      CLIENT_EMAIL:
+        required: true
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Debug key length (will not leak)
+        run: |
+          echo -n "$OPENAI_API_KEY" | wc -c
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: Summarize commits with OpenAI
+        uses: Austin1serb/Serbyte-Actions@v1
+        id: summarize
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: E-mail client
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Website Update: New Changes Implemented - ${{ github.repository }}"
+          to: ${{ secrets.CLIENT_EMAIL }}
+          from: Serbyte Bot <${{ secrets.SMTP_USERNAME }}>
+          html_body: ${{ steps.summarize.outputs.email_body }}
