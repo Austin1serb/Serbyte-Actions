@@ -1,14 +1,22 @@
-# Serbyte Actions/action.yaml
-name: "Summarize commits & emit HTML email body"
-description: "Uses OpenAI to professionalize commit messages."
+name: "Summarize commits & send client email"
+description: "Summarizes recent commit messages with OpenAI and either emits an HTML body or sends the email via the bundled reusable workflow."
+author: "Serbyte (Austin Serb)"
+branding:
+  icon: "mail"
+  color: "blue"
+
 inputs:
   openai-model:
-    description: "Chat model"
+    description: "OpenAI chat model ID (e.g., gpt-4o-mini)"
     required: false
     default: "gpt-4o-mini"
+
 outputs:
   email_body:
-    description: "HTML-formatted summary ready for sending"
+    description: "HTML-formatted summary (ready for sending)"
+  summary_md:
+    description: "Markdown summary (for logs/PRs)"
+
 runs:
   using: "node20"
   main: "dist/index.js"
