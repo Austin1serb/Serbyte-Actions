@@ -1,5 +1,5 @@
 name: "Summarize commits & send client email"
-description: "Summarizes recent commit messages with OpenAI and either emits an HTML body or sends the email via the bundled reusable workflow."
+description: "Summarizes recent commit messages with OpenAI and e sends an email"
 author: "Serbyte (Austin Serb)"
 branding:
   icon: "mail"
